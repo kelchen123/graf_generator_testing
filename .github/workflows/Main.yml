@@ -40,6 +40,5 @@ jobs:
       - name: Update Grafana dashboard using API
         #if: steps.check_changes.outputs.changes == 'true'
         run: |
-          jq -n --slurpfile dashboard $GITHUB_WORKSPACE/grafana/output.json '{ "dashboard": $dashboard[0], "message": "Made changes to xyz", "overwrite": true}' < $GITHUB_WORKSPACE/grafana/output.json | curl -k -m 60 --http1.1 -H "Authorization: Bearer ${{ secrets.GRAFANA_API }}" -X POST -H "Content-Type: application/json" --data-binary @- ${{ secrets.GRAFANA_IMPORT_URL }}
-          sleep 10
+          jq -n --slurpfile dashboard $GITHUB_WORKSPACE/grafana/output.json '{ "dashboard": $dashboard[0], "message": "Made changes to xyz", "overwrite": true}' < $GITHUB_WORKSPACE/grafana/output.json | curl --connect-timeout 10 --max-time 30 --http1.1 -H "Authorization: Bearer ${{ secrets.GRAFANA_API }}" -X POST -H "Content-Type: application/json" --data-binary @- ${{ secrets.GRAFANA_IMPORT_URL }}
           
