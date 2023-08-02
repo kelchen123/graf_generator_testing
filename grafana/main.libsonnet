@@ -11,7 +11,7 @@ g.dashboard.new('PerfCI-Regression-Summary Copy')
 + g.dashboard.withTimepicker({},)
 + g.dashboard.withTimezone("")
 + g.dashboard.withUid('BbweBhq4k')
-+ g.dashboard.withVersion(9)
++ g.dashboard.withVersion(8)
 + g.dashboard.withWeekStart("")
 + g.dashboard.withLiveNow(false)
 
