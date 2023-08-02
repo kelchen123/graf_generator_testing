@@ -12,18 +12,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Update grafana json file
+      - name: Run grafana json container generator
         run: |
-          sudo docker run --name grafonnet_run -v $GITHUB_WORKSPACE/grafana:/app:Z --privileged quay.io/rh-ee-kelchen/graf_image_test2:latest
+          sudo docker run --rm --name run_grafonnet -v $GITHUB_WORKSPACE/grafana:/app --privileged quay.io/ebattat/run_grafonnet:latest
 
       - name: Check for changes in grafana json file
         id: check_changes
         run: |
-          git diff --quiet || echo "::set-output name=changes::true"
+          git diff --quiet $GITHUB_WORKSPACE/grafana/output.json || echo "::set-output name=changes::true"
 
-      - name: commit grafana json file
+      - name: Commit grafana json file
         if: steps.check_changes.outputs.changes == 'true'
         run: |
+          echo ${{ steps.check_changes.outputs.changes }}
           git checkout main
           git config --global user.email ${{ secrets.EMAIL }}
           git config --global user.name  ${{ secrets.USER_NAME }}
